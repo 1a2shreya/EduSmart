@@ -1,0 +1,13 @@
+
+C:\Projects\new\DJANGO\frontend\src\Dashboard.js
+  243:7  warning  'COLORS' is assigned a value but never used  no-unused-vars
+
+C:\Projects\new\DJANGO\frontend\src\NotesUpload.js
+  3454:38  warning  The ref value 'pollingIntervals.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'pollingIntervals.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+  3662:6   warning  React Hook useEffect has a missing dependency: 'loadQuiz'. Either include it or remove the dependency array                                                                                                                                                                      react-hooks/exhaustive-deps
+
+C:\Projects\new\DJANGO\frontend\src\StudyPlanPage.js
+  3907:28  warning  'useRef' is defined but never used  no-unused-vars
+
+✖ 4 problems (0 errors, 4 warnings)
+

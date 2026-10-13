@@ -1,0 +1,434 @@
+/* ═══════════════════════════════════════════════════════════
+   NoteUpload.css — Dark Glassmorphism Theme
+   Unified with index.css design system
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Main Container ── */
+.notes-upload-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  animation: fadeInUp 0.5s ease-in-out;
+}
+
+.notes-upload-container .section-header {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-primary);
+  letter-spacing: -0.01em;
+}
+
+/* ── Cards ── */
+.notes-upload-container .card {
+  border-radius: var(--radius-lg);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  margin-bottom: 25px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.notes-upload-container .card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+
+.notes-upload-container .card-header {
+  font-weight: 600;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-glass);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-primary);
+}
+
+.notes-upload-container .card-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ── Buttons ── */
+.notes-upload-container .btn {
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+.notes-upload-container .btn-primary {
+  background: var(--gradient-primary) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.notes-upload-container .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.notes-upload-container .btn-success {
+  background: var(--gradient-success) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.notes-upload-container .btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.notes-upload-container .btn-danger {
+  background: var(--accent-danger) !important;
+  border: none !important;
+  color: white !important;
+}
+
+.notes-upload-container .btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.notes-upload-container .btn-outline-secondary {
+  border: 1px solid var(--border-input) !important;
+  color: var(--text-secondary) !important;
+  background: transparent !important;
+}
+
+.notes-upload-container .btn-outline-secondary:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-glass-hover) !important;
+}
+
+/* ── Upload Section ── */
+.notes-upload-container .upload-box {
+  border: 2px dashed var(--accent-primary);
+  border-radius: var(--radius-lg);
+  background: rgba(99, 102, 241, 0.05);
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+  color: var(--text-secondary);
+}
+
+.notes-upload-container .upload-box:hover {
+  background: rgba(99, 102, 241, 0.1);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-primary-hover);
+}
+
+/* ── List Items ── */
+.notes-upload-container .list-group-item {
+  border-radius: var(--radius-md) !important;
+  margin-bottom: 8px;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.notes-upload-container .list-group-item:hover {
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+  background: var(--bg-glass-hover);
+}
+
+/* ── Flashcards ── */
+.notes-upload-container .flashcard {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  height: 100%;
+  background: var(--bg-glass);
+}
+
+.notes-upload-container .flashcard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-glow);
+}
+
+.notes-upload-container .flashcard .card-header {
+  background: linear-gradient(135deg, #f59e0b, #ef4444) !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+/* ── Flashcard Flip ── */
+.flashcard-flip {
+  perspective: 1000px;
+  height: 100%;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flashcard-flip:hover .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.flashcard-front {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  z-index: 2;
+}
+
+.flashcard-back {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-glass);
+  transform: rotateY(180deg);
+}
+
+.flashcard-front .card-header,
+.flashcard-back .card-header {
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.flashcard-front .card-body,
+.flashcard-back .card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  color: var(--text-secondary);
+}
+
+/* ── Quiz Questions ── */
+.notes-upload-container .quiz-question {
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-glass);
+}
+
+.notes-upload-container .quiz-question:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+
+.notes-upload-container .quiz-question .card-header {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1) !important;
+  color: white !important;
+}
+
+/* Quiz Options */
+.notes-upload-container .form-check-label {
+  padding: 12px 15px;
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  background: var(--bg-glass);
+}
+
+.notes-upload-container .form-check-label:hover {
+  transform: scale(1.01);
+  background: var(--bg-glass-hover);
+  border-color: var(--border-glass-hover);
+}
+
+.notes-upload-container .form-check-input:checked + .form-check-label {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--accent-primary);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ── Result Circle ── */
+.notes-upload-container .result-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0 auto 20px;
+  background: conic-gradient(
+    #10b981 var(--progress, 0%),
+    rgba(255, 255, 255, 0.06) var(--progress, 0%) 100%
+  );
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+}
+
+.notes-upload-container .result-circle-inner {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ── Explanations & Hints ── */
+.notes-upload-container .bg-success-light {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-left: 4px solid #10b981;
+  color: var(--text-primary);
+}
+
+.notes-upload-container .bg-danger-light {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #ef4444;
+  color: var(--text-primary);
+}
+
+.notes-upload-container .flashcard-hint {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-left: 3px solid #f59e0b;
+  color: var(--text-primary);
+}
+
+/* ── Summary Cards ── */
+.summary-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-glow);
+}
+
+.summary-card .card-header {
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: var(--gradient-primary) !important;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.summary-card .card-header span {
+  font-size: 1.2rem;
+}
+
+.summary-card .card-body {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* ── Card Glow ── */
+.card-glow {
+  position: relative;
+  border-radius: var(--radius-lg);
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid var(--border-glass);
+}
+
+.card-glow::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -1;
+  border-radius: calc(var(--radius-lg) + 2px);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.1));
+  background-size: 200% 200%;
+  animation: gradientShift 5s ease infinite;
+}
+
+.card-glow:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-glow-hover);
+}
+
+/* ── Flashcard Card ── */
+.flashcard-card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.flashcard-card:hover {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+  transform: translateY(-5px);
+}
+
+/* ── Alerts ── */
+.notes-upload-container .alert {
+  border-radius: var(--radius-md);
+  padding: 12px 15px;
+  border: none;
+}
+
+.notes-upload-container .alert-danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-left: 4px solid #ef4444;
+  color: var(--accent-danger);
+}
+
+.notes-upload-container .alert-success {
+  background: rgba(16, 185, 129, 0.15);
+  border-left: 4px solid #10b981;
+  color: var(--accent-success);
+}
+
+.notes-upload-container .alert-info {
+  background: rgba(6, 182, 212, 0.15);
+  border-left: 4px solid #06b6d4;
+  color: var(--accent-info);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .notes-upload-container .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .notes-upload-container .btn-group {
+    flex-direction: column;
+  }
+
+  .notes-upload-container .result-circle {
+    width: 120px;
+    height: 120px;
+  }
+
+  .notes-upload-container .result-circle-inner {
+    width: 90px;
+    height: 90px;
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,58 @@
+﻿# ==========================================
+# 1. Environment Variables & Secrets
+# ==========================================
+.env
+crud/.env
+*.env
+*.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ==========================================
+# 2. Python Virtual Environment & Bytecode
+# ==========================================
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*.class
+*.pytest_cache/
+
+# ==========================================
+# 3. Node.js & React Frontend
+# ==========================================
+frontend/node_modules/
+frontend/build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==========================================
+# 4. Database & User Uploads
+# ==========================================
+*.sqlite3
+crud/db.sqlite3
+*.sqlite3-journal
+crud/media/*
+media/*
+!crud/media/.gitkeep
+!media/.gitkeep
+
+# ==========================================
+# 5. Large Backups & Temporary Files
+# ==========================================
+*.zip
+*.tar.gz
+DJANGO_backup.zip
+check_out*.txt
+
+# ==========================================
+# 6. IDEs & Operating System Files
+# ==========================================
+.kilo/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

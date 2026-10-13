@@ -1,0 +1,199 @@
+/* ═══════════════════════════════════════════════════════════
+   Navbar — Dark Glassmorphism
+   ═══════════════════════════════════════════════════════════ */
+
+.edu-navbar {
+  background: rgba(10, 10, 15, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 0;
+  transition: all 0.4s ease;
+  z-index: 1050;
+}
+
+.edu-navbar.navbar-scrolled {
+  background: rgba(10, 10, 15, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 0;
+}
+
+/* Brand */
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--gradient-primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.navbar-brand:hover .brand-icon {
+  transform: rotate(-10deg) scale(1.1);
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+}
+
+.brand-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #f1f5f9, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Nav Links */
+.nav-link-custom {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.9rem !important;
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link-custom:hover {
+  color: var(--text-primary) !important;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link-custom.active {
+  color: var(--accent-primary) !important;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.nav-link-custom.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: var(--accent-primary);
+  border-radius: 2px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { width: 0; opacity: 0; }
+  to { width: 20px; opacity: 1; }
+}
+
+/* Profile Button */
+.nav-profile-btn {
+  background: var(--bg-glass) !important;
+  border: 1px solid var(--border-glass) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-full) !important;
+  padding: 0.35rem 0.9rem 0.35rem 0.35rem !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-profile-btn:hover {
+  background: var(--bg-glass-hover) !important;
+  border-color: var(--border-glass-hover) !important;
+  box-shadow: var(--shadow-glow);
+}
+
+.nav-profile-btn::after {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+/* Avatar */
+.avatar-sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Hamburger Animation */
+.hamburger {
+  width: 22px;
+  height: 16px;
+  position: relative;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: var(--text-primary);
+  border-radius: 2px;
+  left: 0;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.hamburger span:nth-child(1) { top: 0; }
+.hamburger span:nth-child(2) { top: 7px; width: 70%; }
+.hamburger span:nth-child(3) { top: 14px; }
+
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(1) {
+  top: 7px;
+  transform: rotate(45deg);
+}
+
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(3) {
+  top: 7px;
+  transform: rotate(-45deg);
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
+
+/* Mobile Menu */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: rgba(17, 17, 24, 0.98);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    margin-top: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--border-glass);
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-link-custom {
+    padding: 0.7rem 1rem !important;
+    margin: 0.1rem 0;
+  }
+
+  .nav-profile-btn {
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+}

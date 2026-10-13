@@ -1,0 +1,774 @@
+================================================================================
+                         EDUSMART - PROJECT DOCUMENTATION
+                           Full Project Overview & Workflows
+================================================================================
+
+PROJECT NAME: EduSmart
+VERSION: 1.0
+LAST UPDATED: 2025
+AUTHOR: Solo Developer (Built independently)
+
+================================================================================
+1. PROJECT INTRODUCTION
+================================================================================
+
+WHAT IS EDUSMART?
+EduSmart is a comprehensive full-stack web application designed to help 
+students and professionals make informed career decisions through intelligent 
+analysis, personalized recommendations, and structured learning pathways.
+
+TARGET AUDIENCE:
+- High school and college students exploring career options
+- Job seekers transitioning between careers
+- Professionals seeking skill development guidance
+- Anyone needing structured study materials and career planning
+
+KEY VALUE PROPOSITION:
+- AI-powered career recommendations based on skills and preferences
+- Personalized learning through AI-generated study materials
+- Structured study plans with progress tracking
+- Real-time job market integration (Internshala internships)
+- Interactive quiz system with adaptive difficulty
+- Spaced repetition flashcards for effective learning retention
+
+================================================================================
+2. TECHNOLOGY STACK
+================================================================================
+
+BACKEND:
+- Framework: Django 5.2.3 (Python web framework)
+- API: Django REST Framework (RESTful API development)
+- Database: SQLite (lightweight, file-based database)
+- Hosting: Python-based backend server
+- Port: 8000 (default Django development server)
+
+FRONTEND:
+- Framework: React 19.1.0 (JavaScript UI library)
+- HTTP Client: Axios (for API communication)
+- Routing: React Router (page navigation)
+- Charts: Recharts (data visualization)
+- UI Framework: Bootstrap (CSS styling)
+- Build Tool: npm/Create React App
+
+AI & MACHINE LEARNING:
+- ML Library: Scikit-learn (DecisionTreeClassifier for career predictions)
+- NLP: Spacy + Transformers (natural language processing for notes)
+- Generative AI: Google Gemini API (content generation)
+  * Note summarization
+  * Quiz question generation
+  * Study plan creation
+
+WEB SCRAPING:
+- Library: BeautifulSoup4 (HTML/XML parsing)
+- Target: Internshala (internship and job listings)
+- Frequency: On-demand scraping with fallback mock data
+
+AUTHENTICATION:
+- Method: Token-based authentication (Custom JWT-like)
+- OTP Verification: Email/Phone OTP for security
+
+================================================================================
+3. COMPLETE ARCHITECTURE OVERVIEW
+================================================================================
+
+APPLICATION FLOW:
+
+User → React Frontend (localhost:3000) 
+        ↓
+        [API Proxy → localhost:8000]
+        ↓
+Django Backend (API Server)
+├── Authentication Module
+├── Career ML Engine
+├── Note Processing Engine (Gemini AI)
+├── Quiz Generation Engine (Gemini AI)
+├── Study Plan Generator (Gemini AI)
+├── Flashcard System (SM-2 Algorithm)
+├── Job Scraper (Internshala)
+└── SQLite Database
+
+FOLDER STRUCTURE:
+
+/EduSmart/
+├── crud/
+│   ├── api/
+│   │   ├── models.py (9 core database models)
+│   │   ├── views.py (20+ API endpoints)
+│   │   ├── urls.py (routing configuration)
+│   │   ├── serializers.py (data serialization)
+│   │   ├── admin.py (Django admin interface)
+│   │   └── apps.py (app configuration)
+│   ├── ml/
+│   │   ├── career_model.py (ML prediction engine)
+│   │   ├── career_model.pkl (trained model file)
+│   │   └── label_encoders.pkl (encoding mappings)
+│   ├── scraper/
+│   │   └── intershala_scraper.py (web scraper for jobs)
+│   ├── media/ (uploaded files storage)
+│   ├── manage.py (Django management script)
+│   └── settings.py (Django configuration)
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── App.js
+│   │   └── index.js
+│   ├── package.json (dependencies)
+│   └── public/
+├── requirements.txt (Python dependencies)
+├── README.md (project overview)
+└── venv/ (Python virtual environment)
+
+================================================================================
+4. DATABASE SCHEMA & MODELS
+================================================================================
+
+The application uses 9 core database models:
+
+1. USER PROFILE MODEL (Profile)
+   - Stores user information and credentials
+   - Fields: user_id, name, email, phone, password, avatar, otp, is_verified
+   - Purpose: User management and authentication
+
+2. QUIZ RESPONSE MODEL (QuizResponse)
+   - Captures initial career preference survey
+   - Fields: user_id, responses (JSON), created_at
+   - Purpose: Stores answers to career discovery questions
+
+3. CAREER RECOMMENDATION MODEL (CareerRecommendation)
+   - Generated by ML model from quiz responses
+   - Fields: user_id, career_name, confidence_score, salary_range, roadmap, jobs
+   - Purpose: ML-generated career predictions with detailed info
+
+4. NOTE UPLOAD MODEL (NoteUpload)
+   - Tracks uploaded study materials
+   - Fields: user_id, file (DOCX/PDF), title, status, upload_date, processed_at
+   - Purpose: File management for uploaded study materials
+
+5. TOPIC SUMMARY MODEL (TopicSummary)
+   - AI-generated summaries from uploaded notes
+   - Fields: note_id, topic_name, summary_text, key_points, created_at
+   - Purpose: Stores Gemini AI-processed summaries
+
+6. QUIZ QUESTION MODEL (QuizQuestion)
+   - Questions generated from note summaries
+   - Fields: summary_id, question_text, options (JSON), correct_answer, difficulty_level
+   - Purpose: Quiz content generation from study materials
+
+7. QUIZ ATTEMPT MODEL (QuizAttempt)
+   - User's quiz performance records
+   - Fields: user_id, quiz_id, answers (JSON), score, time_taken, completed_at
+   - Purpose: Track learning progress and performance
+
+8. FLASHCARD MODEL (Flashcard)
+   - Spaced repetition learning cards
+   - Fields: summary_id, front_text, back_text, interval, ease_factor, next_review_date
+   - Algorithm: SM-2 (SuperMemo 2) spaced repetition
+   - Purpose: Optimized long-term memory retention
+
+9. STUDY PLAN MODEL (StudyPlan)
+   - Structured learning schedules
+   - Fields: user_id, plan_data (JSON with weekly breakdown), status, created_at, updated_at
+   - Purpose: Organized learning pathway with milestones
+
+10. RESOURCE VISIT LOG MODEL (ResourceVisitLog)
+    - Tracks user access patterns
+    - Fields: user_id, resource_type, resource_id, visited_at
+    - Purpose: Analytics and engagement tracking
+
+================================================================================
+5. COMPLETE WORKFLOWS
+================================================================================
+
+WORKFLOW 1: USER REGISTRATION & AUTHENTICATION
+─────────────────────────────────────────────
+Step 1: User Registration
+  └─ User enters: email, password, phone number
+  └─ Backend validates input and checks for duplicates
+  └─ Password hashed and stored securely
+  └─ Profile created in database
+
+Step 2: OTP Verification
+  └─ OTP generated and sent to user's email/phone
+  └─ User enters OTP in frontend
+  └─ Backend verifies OTP validity
+  └─ If valid: is_verified = True, proceed to login
+  └─ If invalid: reject and ask for resend
+
+Step 3: Login
+  └─ User enters email & password
+  └─ Backend checks credentials
+  └─ Password validated using hash comparison
+  └─ Authentication token generated
+  └─ Token sent to frontend for API calls
+  └─ User dashboard loaded
+
+Step 4: Logout
+  └─ User clicks logout
+  └─ Token invalidated on backend
+  └─ Session cleared in frontend
+  └─ Redirected to login page
+
+API ENDPOINTS:
+  POST /api/auth/register/ - User registration
+  POST /api/auth/verify-otp/ - OTP verification
+  POST /api/auth/login/ - User login
+  POST /api/auth/logout/ - User logout
+
+
+WORKFLOW 2: CAREER RECOMMENDATION & ML PREDICTION
+──────────────────────────────────────────────────
+Step 1: Career Quiz
+  └─ User answers 10-15 multiple choice questions
+  └─ Questions assess: skills, interests, values, preferences
+  └─ Answers stored in QuizResponse model
+  └─ Responses converted to features for ML model
+
+Step 2: ML Model Prediction
+  └─ scikit-learn DecisionTreeClassifier processes features
+  └─ Model trained on career database
+  └─ Returns: Top 3 career recommendations with confidence scores
+  └─ Each prediction includes: career_name, confidence%, salary_range
+
+Step 3: Enrichment Data
+  └─ For each top 3 career:
+     • Fetch career roadmap (required skills & certifications)
+     • Query internship opportunities from Internshala
+     • Compile salary information
+     • Create career growth path (3-5 year progression)
+
+Step 4: Display Results
+  └─ Frontend displays top 3 careers
+  └─ User can view detailed information per career
+  └─ Can save recommendations or explore further
+  └─ Results stored in CareerRecommendation model
+
+DATA FLOW:
+  Quiz Answers → Feature Extraction → ML Model
+                                    ↓
+                          Predictions (Top 3) 
+                                    ↓
+                    Fetch Enrichment (Jobs, Roadmap)
+                                    ↓
+                          Display to User
+
+API ENDPOINTS:
+  POST /api/career/quiz/ - Submit career quiz answers
+  GET /api/career/recommendations/{user_id}/ - Get recommendations
+  GET /api/career/career-details/{career_name}/ - Career details
+
+
+WORKFLOW 3: NOTE UPLOAD & AI SUMMARIZATION
+────────────────────────────────────────────
+Step 1: File Upload
+  └─ User selects DOCX or PDF file
+  └─ File validated (size, format, content)
+  └─ File stored in media/notes/ directory
+  └─ NoteUpload record created with status = "uploading"
+
+Step 2: File Processing
+  └─ Backend extracts text from DOCX/PDF
+  └─ Text preprocessed: remove special chars, normalize spacing
+  └─ Long documents split into topics/sections
+  └─ Status updated to "processing"
+
+Step 3: Gemini AI Summarization
+  └─ For each topic/section:
+     • Send text to Google Gemini API
+     • Request: summary (500 words), key points (5-10), learning objectives
+     • Gemini processes and returns structured content
+
+Step 4: Store Summaries
+  └─ Create TopicSummary records for each topic
+  └─ Fields: topic_name, summary_text, key_points, reading_time_estimate
+  └─ Status updated to "completed"
+  └─ Summaries indexed for search
+
+Step 5: User Access
+  └─ User views original note and AI summaries
+  └─ Can create flashcards from summaries
+  └─ Can request quizzes based on summaries
+
+PROCESSING PIPELINE:
+  File Upload → Validation → Extraction → Topic Split
+                                          ↓
+                                 Gemini Summarization
+                                          ↓
+                                 Store TopicSummary
+                                          ↓
+                                   Available for Quiz/Cards
+
+API ENDPOINTS:
+  POST /api/notes/upload/ - Upload note file
+  GET /api/notes/{note_id}/ - Get note details
+  GET /api/notes/{note_id}/summaries/ - Get AI summaries
+  GET /api/notes/user/{user_id}/ - List user's notes
+
+
+WORKFLOW 4: QUIZ GENERATION & ADAPTIVE TESTING
+────────────────────────────────────────────────
+Step 1: Quiz Template Creation
+  └─ Select topic from note summaries
+  └─ Specify: number of questions (5-50), difficulty (Easy/Medium/Hard)
+  └─ Specify: question types (MCQ, True/False, Short Answer)
+
+Step 2: Gemini Question Generation
+  └─ Send topic summary to Gemini API
+  └─ Request: generate N questions with 4 options each
+  └─ Include: difficulty level, answer explanation, related concepts
+  └─ Gemini creates diverse questions (not simple copy-paste)
+
+Step 3: Store Quiz Questions
+  └─ Create QuizQuestion records
+  └─ Fields: question_text, options (JSON), correct_answer, difficulty_level, explanation
+  └─ Link to TopicSummary and user
+
+Step 4: User Takes Quiz
+  └─ Frontend displays one question at a time
+  └─ User selects answer and submits
+  └─ Can review previous questions
+  └─ Timer tracks completion time (optional)
+
+Step 5: Answer Evaluation
+  └─ Backend compares user answers with correct answers
+  └─ Calculate score: (correct/total) × 100
+  └─ Assess difficulty distribution of answered questions
+  └─ Create QuizAttempt record with score and metadata
+
+Step 6: Results & Feedback
+  └─ Display score with performance insights
+  └─ Show: questions answered wrong, explanations, topic recommendations
+  └─ Suggest related study materials
+  └─ Offer option to retake or try different topic
+
+SCORING SYSTEM:
+  Correct Answer → 100% points for that question
+  Partial Credit → 50% for valid reasoning (essay questions)
+  Wrong Answer → 0 points + show explanation
+  Skipped → 0 points
+
+API ENDPOINTS:
+  POST /api/quizzes/generate/ - Generate quiz from topic
+  GET /api/quizzes/{quiz_id}/ - Get quiz questions
+  POST /api/quizzes/{quiz_id}/submit/ - Submit answers
+  GET /api/quizzes/results/{attempt_id}/ - Get quiz results
+
+
+WORKFLOW 5: FLASHCARD SYSTEM WITH SPACED REPETITION
+────────────────────────────────────────────────────
+Step 1: Flashcard Generation
+  └─ User creates flashcards from topic summaries
+  └─ System automatically extracts key_points
+  └─ Each point becomes flashcard front (question)
+  └─ Summary section becomes back (answer)
+  └─ User can edit/customize front and back
+
+Step 2: SM-2 Algorithm Initialization
+  └─ Initial values for each card:
+     • interval = 1 (review after 1 day)
+     • ease_factor = 2.5 (difficulty multiplier)
+     • repetitions = 0 (times reviewed)
+     • next_review_date = today + 1 day
+
+Step 3: Review Session
+  └─ User opens flashcard deck
+  └─ Frontend shows cards due for review (next_review_date <= today)
+  └─ User views front (question)
+  └─ User recalls answer, then reveals back
+  └─ User rates response: 0 (forgot), 1 (hard), 2 (medium), 3 (easy), 4 (perfect)
+
+Step 4: SM-2 Algorithm Application
+  └─ Based on user rating, recalculate:
+     
+     IF rating >= 3 (correct/easy):
+       new_interval = interval × ease_factor
+       new_ease = ease_factor + 0.1
+       repetitions += 1
+     
+     IF rating < 3 (forgotten/hard):
+       new_interval = 1
+       repetitions = 0
+       new_ease = ease_factor - 0.2 (minimum 1.3)
+  
+  └─ Update next_review_date = today + new_interval days
+
+Step 5: Long-term Retention
+  └─ Correctly answered cards reviewed less frequently
+  └─ Example progression: Day 1 → 3 days → 7 days → 21 days → 60 days
+  └─ System adapts to individual learning pace
+  └─ Forgotten cards reset and relearn from start
+
+Step 6: Deck Management
+  └─ User can add/edit/delete cards
+  └─ View deck statistics: total cards, learning%, mastered%
+  └─ Export flashcards to PDF/image
+  └─ Share decks with other users (optional)
+
+SPACED REPETITION ALGORITHM (SM-2):
+  Introduces material at expanding intervals:
+  - Easy responses: intervals increase exponentially (1, 3, 7, 21, 60+ days)
+  - Difficult responses: intervals reset to 1 day
+  - Ease factor adjusts based on performance
+  - Optimal for memory retention and minimizing review time
+
+API ENDPOINTS:
+  POST /api/flashcards/generate/ - Create flashcards from topic
+  GET /api/flashcards/deck/{deck_id}/ - Get cards due for review
+  POST /api/flashcards/{card_id}/rate/ - Submit rating
+  GET /api/flashcards/statistics/ - Deck statistics
+
+
+WORKFLOW 6: STUDY PLAN GENERATION & TRACKING
+──────────────────────────────────────────────
+Step 1: Study Plan Parameters
+  └─ User specifies:
+     • Goal: "Master Python Programming"
+     • Duration: 8 weeks
+     • Time commitment: 10 hours/week
+     • Learning style: Visual/Interactive/Textual
+     • Available topics: from uploaded notes and libraries
+
+Step 2: Gemini AI Planning
+  └─ Send goals + duration + topics to Gemini
+  └─ Request: structured study plan with weekly breakdown
+  └─ Plan includes: milestones, daily tasks, resources, assessments
+  └─ Gemini creates realistic, progressive curriculum
+
+Step 3: Plan Structure
+  └─ Weekly breakdown (8 weeks in this example):
+     Week 1: Introduction & Fundamentals
+     Week 2: Core Concepts
+     Week 3: Practical Application
+     Week 4: Projects & Practice
+     Week 5-6: Advanced Topics
+     Week 7: Capstone Project
+     Week 8: Review & Mastery Assessment
+  
+  └─ Daily tasks per week:
+     • Monday-Thursday: Learn new concepts (readings, videos)
+     • Friday: Practice and review
+     • Saturday-Sunday: Project work
+
+Step 4: Store in Database
+  └─ Create StudyPlan record
+  └─ plan_data (JSON) structure:
+     {
+       "goal": "Master Python",
+       "duration_weeks": 8,
+       "weeks": [
+         {
+           "week_num": 1,
+           "title": "Fundamentals",
+           "tasks": ["Learn variables", "Practice loops"],
+           "resources": ["topic_summary_id_1", "link_2"],
+           "assessment": "quiz_id_1"
+         },
+         ...
+       ],
+       "progress_tracking": {...}
+     }
+
+Step 5: Progress Tracking
+  └─ User marks tasks as complete
+  └─ System tracks: % completion per week, overall progress
+  └─ Calculate: time spent, quizzes taken, notes reviewed
+  └─ Display progress dashboard with charts
+
+Step 6: Adaptive Adjustments
+  └─ User struggling with week? Recommend extra resources
+  └─ User progressing fast? Suggest accelerated path
+  └─ Auto-adjust pace based on quiz performance
+  └─ Send progress notifications and encouragement
+
+Step 7: Completion & Export
+  └─ Upon completion: generate certificate of completion
+  └─ Create summary report: skills learned, time invested, achievements
+  └─ Export plan as PDF for portfolio
+  └─ Suggest next study goals
+
+EXAMPLE WEEKLY STRUCTURE:
+  Week 1: Python Fundamentals
+  ├── Day 1: Variables & Data Types (3 hours)
+  ├── Day 2: Operators & Expressions (3 hours)
+  ├── Day 3: Control Flow (4 hours)
+  ├── Day 4: Functions (4 hours)
+  ├── Day 5: Practice Lab (2 hours)
+  ├── Day 6-7: Mini Project (4 hours)
+  └── Quiz: Python Basics (30 mins)
+
+API ENDPOINTS:
+  POST /api/study-plans/generate/ - Create new plan
+  GET /api/study-plans/{plan_id}/ - Get plan details
+  POST /api/study-plans/{plan_id}/progress/ - Update progress
+  GET /api/study-plans/{plan_id}/export/ - Export as PDF
+
+
+WORKFLOW 7: JOB LISTING INTEGRATION (WEB SCRAPER)
+────────────────────────────────────────────────
+Step 1: Scraper Trigger
+  └─ User views career recommendations
+  └─ System needs to fetch related jobs/internships
+  └─ Call scraper for specific career (e.g., "Data Scientist")
+
+Step 2: Internshala Scraping
+  └─ BeautifulSoup connects to Internshala website
+  └─ Parse HTML to extract:
+     • Job Title
+     • Company Name
+     • Location
+     • Internship Stipend
+     • Job Link
+  
+  └─ Filter results by:
+     • Career type matching recommendation
+     • Location preferences (optional)
+     • Stipend range
+
+Step 3: Error Handling & Fallback
+  └─ If scraping fails (site down, blocked, timeout):
+     • Use mock data (predefined job listings)
+     • Return cached data from previous scrape
+     • Show "Offline data" indicator to user
+
+Step 4: Store & Cache
+  └─ Store scraped jobs in cache (Redis/Memory)
+  └─ TTL: 24 hours before re-scraping
+  └─ Prevents repeated scraping of same data
+  └─ Improves response time
+
+Step 5: Display to User
+  └─ Show job listings on career details page
+  └─ Jobs organized by: salary, location, company
+  └─ User can click to view full job description (links to Internshala)
+  └─ Can save favorite jobs for later
+
+DATA EXTRACTION:
+  URL: internshala.com/search/
+  Elements: job_title, company, location, stipend, link
+  Format: JSON list [{title, company, location, stipend, link}, ...]
+  
+  FALLBACK (if scraping fails):
+  Use mock data set with 20+ sample internships per career
+
+API ENDPOINTS:
+  GET /api/jobs/career/{career_name}/ - Get jobs for career
+  GET /api/jobs/search/ - Search jobs by criteria
+
+
+================================================================================
+6. KEY FEATURES SUMMARY
+================================================================================
+
+✓ User Authentication
+  - Email/password registration
+  - OTP verification for security
+  - Token-based API authentication
+  - Profile management and avatars
+
+✓ AI-Powered Career Guidance
+  - ML-based career recommendations (Top 3)
+  - Confidence scores and detailed career info
+  - Career roadmaps and growth paths
+  - Real job market data integration
+
+✓ Intelligent Learning
+  - AI-generated summaries from notes (Gemini)
+  - Automated quiz generation with difficulty levels
+  - Adaptive quiz scoring and feedback
+  - Performance analytics and progress tracking
+
+✓ Spaced Repetition Learning
+  - SM-2 algorithm for optimal retention
+  - Customizable flashcard decks
+  - Intelligent review scheduling
+  - Mastery tracking
+
+✓ Personalized Study Plans
+  - AI-generated weekly breakdowns
+  - Milestone-based learning
+  - Progress tracking and notifications
+  - PDF export for portfolio
+
+✓ Job Market Integration
+  - Real-time internship scraping
+  - Career-specific job listings
+  - Salary information
+  - Direct links to opportunities
+
+✓ Learning Analytics
+  - Quiz performance tracking
+  - Study time analytics
+  - Progress dashboards
+  - Achievement certificates
+
+================================================================================
+7. API ENDPOINTS REFERENCE
+================================================================================
+
+AUTHENTICATION ENDPOINTS:
+  POST   /api/auth/register/              Register new user
+  POST   /api/auth/verify-otp/            Verify OTP
+  POST   /api/auth/login/                 Login user
+  POST   /api/auth/logout/                Logout user
+  GET    /api/auth/profile/               Get user profile
+
+CAREER ENDPOINTS:
+  POST   /api/career/quiz/                Submit career quiz
+  GET    /api/career/recommendations/     Get recommendations
+  GET    /api/career/{career_id}/         Get career details
+  GET    /api/jobs/career/{name}/         Get jobs for career
+
+NOTES ENDPOINTS:
+  POST   /api/notes/upload/               Upload study note
+  GET    /api/notes/                      List user notes
+  GET    /api/notes/{note_id}/            Get note details
+  DELETE /api/notes/{note_id}/            Delete note
+  GET    /api/notes/{note_id}/summaries/  Get AI summaries
+
+QUIZ ENDPOINTS:
+  POST   /api/quizzes/generate/           Generate quiz
+  GET    /api/quizzes/{quiz_id}/          Get quiz questions
+  POST   /api/quizzes/{quiz_id}/submit/   Submit answers
+  GET    /api/quizzes/{quiz_id}/results/  Get results
+
+FLASHCARD ENDPOINTS:
+  POST   /api/flashcards/create/          Create flashcards
+  GET    /api/flashcards/due/             Get cards due today
+  POST   /api/flashcards/{card_id}/rate/  Rate flashcard
+  GET    /api/flashcards/statistics/      Get deck stats
+  DELETE /api/flashcards/{card_id}/       Delete card
+
+STUDY PLAN ENDPOINTS:
+  POST   /api/study-plans/generate/       Create study plan
+  GET    /api/study-plans/{plan_id}/      Get plan
+  POST   /api/study-plans/{plan_id}/      Update progress
+  GET    /api/study-plans/{plan_id}/      Export plan
+
+================================================================================
+8. HOW TO EXPLAIN THIS PROJECT
+================================================================================
+
+QUICK ELEVATOR PITCH (30 seconds):
+"EduSmart is an intelligent learning platform that helps students make
+career decisions. It analyzes their skills through an AI career quiz, gives
+personalized career recommendations with job opportunities, and then creates
+customized study plans with AI-generated materials to help them learn the
+necessary skills. It's like having a career coach and study tutor in one app."
+
+TECHNICAL OVERVIEW (For Engineers):
+"It's a full-stack application: React frontend communicates with Django REST API
+backend. The ML module uses scikit-learn for career predictions. For content
+generation, we integrate Google Gemini API. We also scrape Internshala for
+real job data. Everything is stored in SQLite. The flashcard system implements
+SM-2 spaced repetition for optimal learning."
+
+FOR NON-TECHNICAL STAKEHOLDERS:
+"This platform helps young professionals three ways:
+1. Discover their ideal career through a smart AI quiz
+2. Access personalized study materials for skills they need
+3. Get access to real job opportunities in their chosen field
+The system uses AI to generate personalized study guides and quizzes based on
+uploaded materials, and tracks their progress with smart scheduling algorithms."
+
+KEY POINTS TO HIGHLIGHT:
+✓ Personalized (custom recommendations, study plans)
+✓ Intelligent (ML + AI for predictions and content generation)
+✓ Comprehensive (from discovery to learning to job market)
+✓ Evidence-based (uses proven spaced repetition algorithm)
+✓ Practical (real job integration, exportable plans)
+
+WORKFLOW SUMMARY YOU CAN USE:
+1. Register → Get OTP verification
+2. Take career quiz → Receive top 3 career recommendations + jobs
+3. Upload study notes → AI generates summaries and quizzes
+4. Study with smart cards → System schedules reviews for retention
+5. Track progress → Dashboard shows learning metrics
+6. Get job opportunities → Browse positions matching your career goal
+
+================================================================================
+9. INSTALLATION & SETUP
+================================================================================
+
+PREREQUISITES:
+- Python 3.8+
+- Node.js 14+
+- pip (Python package manager)
+- npm (Node package manager)
+
+BACKEND SETUP:
+1. Navigate to project directory:
+   cd c:\Projects\new\EduSmart
+
+2. Create and activate virtual environment:
+   python -m venv venv
+   venv\Scripts\activate  (Windows)
+
+3. Install Python dependencies:
+   pip install -r requirements.txt
+
+4. Run Django migrations:
+   python crud\manage.py migrate
+
+5. Create superuser (admin):
+   python crud\manage.py createsuperuser
+
+6. Start Django server:
+   python crud\manage.py runserver
+
+FRONTEND SETUP:
+1. Navigate to frontend:
+   cd frontend
+
+2. Install Node dependencies:
+   npm install
+
+3. Start React development server:
+   npm start
+
+4. Access application:
+   Frontend: http://localhost:3000
+   Backend API: http://localhost:8000
+   Django Admin: http://localhost:8000/admin
+
+ENVIRONMENT SETUP:
+- Set Gemini API key in Django settings
+- Configure email backend for OTP sending
+- Set up Internshala scraper URLs
+
+================================================================================
+10. DEPLOYMENT CONSIDERATIONS
+================================================================================
+
+BACKEND DEPLOYMENT:
+- Use gunicorn or uWSGI for production server
+- Configure ALLOWED_HOSTS in Django settings
+- Use PostgreSQL instead of SQLite for production
+- Enable HTTPS/SSL certificates
+- Set DEBUG = False in production
+- Use environment variables for sensitive data
+
+FRONTEND DEPLOYMENT:
+- Build production bundle: npm run build
+- Deploy to Vercel, Netlify, or AWS S3 + CloudFront
+- Configure CORS for API communication
+- Set API_BASE_URL to production server
+
+DATABASE:
+- Backup SQLite file regularly
+- Or migrate to managed database (PostgreSQL, MySQL)
+- Set up automated backup schedules
+
+SCALING:
+- Use Redis for caching and session management
+- Implement database indexing for common queries
+- Use CDN for static assets
+- Consider async task queue (Celery) for long-running jobs
+
+================================================================================
+
+END OF PROJECT DOCUMENTATION
+Generated for: EduSmart Platform
+Purpose: Comprehensive project overview, workflows, and architecture reference
+Use this document to explain the project to recruiters, interviewers, or stakeholders.
+
+Version 1.0 | January 2025
